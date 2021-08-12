@@ -31,6 +31,7 @@ class Event:
             daysDict[3] = 'Thursday'
         if abbreviateDate == 1:
             daysDict[3] = 'R'
+            daysDict[6] = 'U'
         if abbreviateDate == 2:
             daysDict[3] = 'Th'
         for i in [daysDict[i] for i in days]:

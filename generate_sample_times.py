@@ -8,6 +8,8 @@ import random
 eventList = []
 TOTAL_EVENTS = 100
 DURATION = random.randint(900,3600) # 15-60 minutes
+delimiters = ["; ", " and "]
+
 
 # Populate the eventList with events using random days and times
 for i in range(0,TOTAL_EVENTS):
@@ -24,26 +26,37 @@ for i in range(0,TOTAL_EVENTS):
         multEvent.append(event)
     eventList.append(multEvent)
 
+
 # Print multiple time ranges on the same line with the same template
 for multEvent in eventList:
     for template in templates:
-        # Randomize between separating multiple time ranges with ";" or "and"
-        if(random.randint(0, 1)):
-            delimiter = "; "
-        else:
-            delimiter = " and "
+        # Add test cases for events separated by "; " and " and "
+        for delimiter in delimiters:
+            # If printing the last time range in the event, end with a new line, otherwise, the randomly decided delimiter
+            for count, event in enumerate(multEvent):           
+                if(count == len(multEvent)-1):
+                    ending = "\n"
+                else:
+                    ending = delimiter
 
-        # If printing the last time range in the event, end with a new line, otherwise, the randomly decided delimiter
-        for count, event in enumerate(multEvent):           
-            if(count == len(multEvent)-1):
-                ending = "\n"
-            else:
-                ending = delimiter
-                
-            print(template.format(
-                name=event.name,
-                days=event.days_str,
-                startTime=event.startTime,
-                endTime=event.endTime,
-                duration=event.duration,
-                year=event.year), end=ending)
+                # Randomize between using military time or AM/PM
+                if(random.randint(0, 1)):
+                    eventStartTime = event.startTime.strftime("%I:%M %p")
+                    eventEndTime = event.endTime.strftime("%I:%M %p")
+                else:
+                    eventStartTime = event.startTime
+                    eventEndTime = event.endTime
+
+                # Chance for single letter abbreviations to not be separated by a comma (MWF instead of M, W, F)
+                eventDays = event.days_str
+                if(event.abbreviateDate == 1):
+                    if(random.randint(0, 1)):
+                        eventDays = event.days_str.replace(", ", "")
+
+                print(template.format(
+                    name=event.name,
+                    days=eventDays,
+                    startTime=eventStartTime,
+                    endTime=eventEndTime,
+                    duration=event.duration,
+                    year=event.year), end=ending)
