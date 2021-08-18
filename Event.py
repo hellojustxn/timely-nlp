@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-import datetime as dt
 from typing import List
+import datetime as dt
+import json
 
 daysDict = {
     0: 'Monday',
@@ -11,35 +12,18 @@ daysDict = {
     5: 'Saturday',
     6: 'Sunday',
 }
-
 class Event:
     """
     duration in seconds
     """
-    def __init__(self, name: str, days: List[int], startTime: dt.time, duration: int, year: int, abbreviateDate: int):
-        self.name = name
-        self.days = days
-        self.days_str = ""
-        self.startTime = startTime
-        self.endTime = (dt.datetime(100,1,1,startTime.hour,startTime.minute,startTime.second) + dt.timedelta(seconds=duration)).time() 
+    def __init__(self, eventName: str, days: List[int], startTime: dt.time, duration: int, year: int):
+        self.eventName = eventName
+        self.days = [daysDict[d] for d in days]
+        self.daysStr = ' '.join(map(str, self.days)).replace(" ", ", ")
+        self.startTime = startTime.strftime("%H:%M")
+        self.endTime = (dt.datetime(100,1,1,startTime.hour,startTime.minute,startTime.second) + dt.timedelta(seconds=duration)).time().strftime("%H:%M")
         self.duration = duration
         self.year = year
-        self.abbreviateDate = abbreviateDate
-
-        # TODO: Handle abbreviations here for now
-        if abbreviateDate == 0:
-            daysDict[3] = 'Thursday'
-        if abbreviateDate == 1:
-            daysDict[3] = 'R'
-            daysDict[6] = 'U'
-        if abbreviateDate == 2:
-            daysDict[3] = 'Th'
-        for i in [daysDict[i] for i in days]:
-            if (abbreviateDate == 0): 
-                self.days_str += i + ", "
-            else:
-                self.days_str += i[0:abbreviateDate] + ", "
-        self.days_str=self.days_str[:-2]
 
     def set_days(self, days: List[int]):
         self.days = days
@@ -53,10 +37,7 @@ class Event:
     def set_duration(self, duration: int):
         self.duration = duration
         self.stateTime += dt.timedelta(seconds=duration)
-    
-    def __str__(self):
-        days_str = ""
-        for i in self.days:
-            days_str += daysDict[i] + ", "
-        days_str=days_str[0:len(days_str)-2]
-        return self.name + ' - ' + days_str + ' from ' + str(self.startTime) + ' to ' + str(self.endTime)
+    def __str__():
+        print("hi")
+    def __repr__(self):
+        return json.dumps(self.__dict__)
