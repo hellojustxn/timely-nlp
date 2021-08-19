@@ -3,12 +3,11 @@ import json
 import random
 import argparse
 import re
-
 import sys
 from templates import templates
 
 # Generate training data, train.txt, using data.json and templates.py
-# TODO: Use argparse instead
+# TODO: Use argparse instead if we decide to add more features
 # parser = argparse.ArgumentParser(description='Name of the data file')
 # parser.add_argument('string', metavar='N', type=int, nargs='+',
 #                     help='an integer for the accumulator')
@@ -38,7 +37,6 @@ def writeMultiEvent(groupEvent):
       res = tmp + conjuctions[random.randint(0, len(conjuctions) - 1)]
     else:
       res = res + tmp
-  # print(f"{res}\n\n")
   f.write(f"{res}")
 
 # At most 5 events in a groupEvent
@@ -47,8 +45,7 @@ fileName=f"train-{x}.txt"
 f = open(fileName, "w")
 for groupEvent in data:
     writeMultiEvent(groupEvent)
-    if groupEvent != data[-1]:
-        f.write(f"\n")
+    f.write(f"\n")
 f.close()
 
 print(f"Files generated: {sys.argv[1]}, {fileName}")
