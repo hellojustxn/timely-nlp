@@ -24,12 +24,16 @@ if len(sys.argv) != 2:
 j = open(sys.argv[1])
 data = json.load(j)
 
+def abbrev(s):
+  return s[0:2]
+
 def writeMultiEvent(groupEvent):
   conjuctions = [" , ", " and ", " // ", " + "]
   # for template in templates:
   res = ""
   for event in groupEvent:
     # Pick a random template
+    # TODO: Change daysstr to days call abbrev to traverse over the arr and build a string
     tmp = templates[random.randint(0,len(templates)-1)].format(eventName=event['eventName'], days=event['daysStr'], startTime=event['startTime'], endTime=event['endTime'], duration=event['duration'], year=event['year'])
 
     # If the index is not at the last element, do not append "and"
@@ -39,13 +43,13 @@ def writeMultiEvent(groupEvent):
       res = res + tmp
   f.write(f"{res}")
 
-# At most 5 events in a groupEvent
 x = re.search("(\d+)", sys.argv[1]).group()
 fileName=f"train-{x}.txt"
 f = open(fileName, "w")
 for groupEvent in data:
     writeMultiEvent(groupEvent)
-    f.write(f"\n")
+    if (groupEvent != data[-1]):
+      f.write(f"\n")
 f.close()
 
 print(f"Files generated: {sys.argv[1]}, {fileName}")

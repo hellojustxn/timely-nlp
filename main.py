@@ -12,7 +12,7 @@ def main():
     exit(1)
 
   NUM_EVENTS = int(sys.argv[1])
-  MAX_EVENTS_IN_GROUP = 5
+  MAX_EVENTS_IN_GROUP = 1
 
   eventData = []
   for i in range(NUM_EVENTS):
@@ -37,7 +37,7 @@ def main():
     eventData.append(group)
 
   now = datetime.datetime.now().strftime("%m%d%S")
-  fileName = f"data-{now}.json"
+  fileName = f"label-{now}.json"
   f = open(fileName, "w")
   f.write(f"{eventData}")
   f.close()
