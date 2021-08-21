@@ -27,15 +27,30 @@ data = json.load(j)
 def abbrev(s):
   return s[0:2]
 
+def abbreviateDays(daysStr, abbreviateDate):
+  splitDays = daysStr.replace(' ', '').split(',')
+  for index, day in enumerate(splitDays):
+    if (day == 'Thursday' and abbreviateDate == 1):
+        splitDays[index] = 'R'
+    elif (day == 'Thursday' and abbreviateDate == 2):
+        splitDays[index] = 'Th'        
+    else:
+      if abbreviateDate == 0:
+        splitDays[index] = day
+      else:
+        splitDays[index] = day[0:abbreviateDate]
+  return ' '.join(map(str, splitDays)).replace(" ", ", ")
+
 def writeMultiEvent(groupEvent):
   conjuctions = [" , ", " and ", " // ", " + "]
   # for template in templates:
   res = ""
+  abbreviateDate = random.randint(0, 3)
   for event in groupEvent:
     # Pick a random template
     # TODO: Change daysstr to days call abbrev to traverse over the arr and build a string
-    tmp = templates[random.randint(0,len(templates)-1)].format(eventName=event['eventName'], days=event['daysStr'], startTime=event['startTime'], endTime=event['endTime'], duration=event['duration'], year=event['year'])
-
+    daysStr_cpy = abbreviateDays(event['daysStr'], abbreviateDate)
+    tmp = templates[random.randint(0,len(templates)-1)].format(eventName=event['eventName'], days=daysStr_cpy, startTime=event['startTime'], endTime=event['endTime'], duration=event['duration'], year=event['year'])
     # If the index is not at the last element, do not append "and"
     if (event != groupEvent[-1]):
       res = tmp + conjuctions[random.randint(0, len(conjuctions) - 1)]
